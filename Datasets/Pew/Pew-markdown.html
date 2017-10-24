@@ -126,7 +126,8 @@ $(document).ready(function () {
 
 <div id="a-template-for-analysis-of-pew-political-polls-data-sets" class="section level1">
 <h1>A template for analysis of Pew political polls data sets</h1>
-<p>This is an example of a stylized analysis of the data sets that have common variables. I am using Pew Research Center data as they have similar structure and some common variables.</p>
+<p>This is an example of a stylized analysis of the data sets that have common variables. I am using Pew Research Center data as they have similar structure and some common variables. For full description and data use license, please see <a href="http://www.people-press.org/datasets/2016/" class="uri">http://www.people-press.org/datasets/2016/</a>.</p>
+<p>The current analysis deals with June16 data set.</p>
 <div id="required-libraries" class="section level2">
 <h2>Required libraries</h2>
 <p>The basic functionality of <code>R</code> is fairly limited, so nearly any analysis requires loading additional modules, referred to as libraries, that contain code developed by third party programmers to manipulate data, produce graphs and tables, run statistical models, and more. For this document, we would need the following libraries:</p>
@@ -138,26 +139,29 @@ library(stringr)     # to manipulate the graph labels</code></pre>
 <div id="loading-the-data" class="section level2">
 <h2>Loading the data</h2>
 <pre class="r"><code>setwd(&quot;C:/Users/kolenikovs/Conferences/MAPOR.2017/R with Trent/datasets/Pew&quot;)  # note forward slashes
-pew_data &lt;- read.spss(&quot;June16 public.sav&quot;,to.data.frame=TRUE)</code></pre>
-<pre><code>## Warning in read.spss(&quot;June16 public.sav&quot;, to.data.frame = TRUE): June16
+data_set_name &lt;- paste0(params$data, &quot; public.sav&quot;)
+cat(&quot;Data set processed: &quot;, data_set_name, &quot;\n&quot;)</code></pre>
+<pre><code>## Data set processed:  June16 public.sav</code></pre>
+<pre class="r"><code>pew_data &lt;- read.spss(data_set_name,to.data.frame=TRUE)</code></pre>
+<pre><code>## Warning in read.spss(data_set_name, to.data.frame = TRUE): June16
 ## public.sav: Very long string record(s) found (record type 7, subtype 14),
 ## each will be imported in consecutive separate variables</code></pre>
 <pre><code>## re-encoding from UTF-8</code></pre>
-<pre><code>## Warning in read.spss(&quot;June16 public.sav&quot;, to.data.frame = TRUE): Undeclared
+<pre><code>## Warning in read.spss(data_set_name, to.data.frame = TRUE): Undeclared
 ## level(s) 2, 3, 4 added in variable: density</code></pre>
-<pre><code>## Warning in read.spss(&quot;June16 public.sav&quot;, to.data.frame = TRUE): Undeclared
+<pre><code>## Warning in read.spss(data_set_name, to.data.frame = TRUE): Undeclared
 ## level(s) 2, 3, 4 added in variable: sdensity</code></pre>
-<pre><code>## Warning in read.spss(&quot;June16 public.sav&quot;, to.data.frame = TRUE): Undeclared
+<pre><code>## Warning in read.spss(data_set_name, to.data.frame = TRUE): Undeclared
 ## level(s) 1, 2, 3, 4, 5, 7 added in variable: qs4</code></pre>
-<pre><code>## Warning in read.spss(&quot;June16 public.sav&quot;, to.data.frame = TRUE): Undeclared
+<pre><code>## Warning in read.spss(data_set_name, to.data.frame = TRUE): Undeclared
 ## level(s) 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
 ## 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52,
 ## 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71,
 ## 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 90, 91,
 ## 92, 93, 95, 96 added in variable: age</code></pre>
-<pre><code>## Warning in read.spss(&quot;June16 public.sav&quot;, to.data.frame = TRUE): Undeclared
+<pre><code>## Warning in read.spss(data_set_name, to.data.frame = TRUE): Undeclared
 ## level(s) 1, 2, 3, 4, 5, 6, 7 added in variable: hh1</code></pre>
-<pre><code>## Warning in read.spss(&quot;June16 public.sav&quot;, to.data.frame = TRUE): Undeclared
+<pre><code>## Warning in read.spss(data_set_name, to.data.frame = TRUE): Undeclared
 ## level(s) 1, 2, 3, 4, 5, 6, 7 added in variable: hh3</code></pre>
 <p>As we see from the warning output, not everything in R is fully compatible with SPSS.</p>
 </div>
@@ -171,7 +175,7 @@ pew_data &lt;- read.spss(&quot;June16 public.sav&quot;,to.data.frame=TRUE)</code
 </div>
 <div id="analysis-with-weights" class="section level2">
 <h2>Analysis with weights</h2>
-<p>A common warmup question asked in all Pew surveys is</p>
+<p>A common question asked in all Pew surveys is</p>
 <blockquote>
 <p>PARTY. In politics TODAY, do you consider yourself a Republican, Democrat, or independent?</p>
 </blockquote>
@@ -196,7 +200,7 @@ pew_data &lt;- read.spss(&quot;June16 public.sav&quot;,to.data.frame=TRUE)</code
 </div>
 <div id="r-markdown" class="section level2">
 <h2>R Markdown</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>. This document was produced on 2017-10-24 10:27:52 using R version 3.4.1 (2017-06-30). The following packages were used:</p>
+<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>. This document was produced on 2017-10-24 18:56:33 using R version 3.4.1 (2017-06-30). The following packages were used:</p>
 <ul>
 <li><code>foreign</code> package version 0.8.69</li>
 <li><code>survey</code> package version 3.32.1</li>

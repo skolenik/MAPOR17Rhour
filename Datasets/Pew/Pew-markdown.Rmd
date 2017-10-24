@@ -3,6 +3,8 @@ title: "Pew data set"
 author: "Stas Kolenikov"
 date: "October 24, 2017"
 output: html_document
+params: 
+  data: June16
 ---
 
 ```{r setup, include=FALSE}
@@ -13,6 +15,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This is an example of a stylized analysis of the data sets that have common variables.
 I am using Pew Research Center data as they have similar structure and some common variables.
+For full description and data use license, please see <http://www.people-press.org/datasets/2016/>.
+
+The current analysis deals with `r params$data` data set.
 
 ## Required libraries
 
@@ -32,7 +37,9 @@ library(stringr)     # to manipulate the graph labels
 
 ```{r usespss}
 setwd("C:/Users/kolenikovs/Conferences/MAPOR.2017/R with Trent/datasets/Pew")  # note forward slashes
-pew_data <- read.spss("June16 public.sav",to.data.frame=TRUE)
+data_set_name <- paste0(params$data, " public.sav")
+cat("Data set processed: ", data_set_name, "\n")
+pew_data <- read.spss(data_set_name,to.data.frame=TRUE)
 ```
 
 As we see from the warning output, not everything in R is fully compatible with SPSS.
