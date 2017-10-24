@@ -1,0 +1,481 @@
+<!-- R Commander Markdown Template -->
+
+MAPOR 2017 Coding Hour: Base Graphics
+=====================================
+
+### Trent Buskirk and Stas Kolenikov
+
+### `r as.character(Sys.Date())`
+
+```{r echo=FALSE}
+# include this code chunk as-is to set options
+knitr::opts_chunk$set(comment=NA, prompt=TRUE, out.width=750, fig.height=8, fig.width=8)
+library(Rcmdr)
+library(car)
+library(RcmdrMisc)
+```
+
+
+```{r echo=FALSE}
+# include this code chunk as-is to enable 3D graphs
+library(rgl)
+knitr::knit_hooks$set(webgl = hook_webgl)
+```
+
+
+## MAPOR 2017 R coding hour (Buskirk + Kolenikov)
+
+## Script 2: graphics
+
+### Index plot
+
+```{r}
+setwd("C:/Users/kolenikovs/Conferences/MAPOR.2017/R with Trent")
+load("datasets/WorkshopData.RData")
+Rtest <- rtest
+with(Rtest, indexplot(NumTVs, type='h', id.method='y', id.n=2, 
+  labels=rownames(Rtest)))
+```
+
+### Histogram
+
+This is a default run:
+
+```{r}
+with(Rtest, Hist(Hhsize, scale="frequency", breaks="Sturges", 
+  col="darkgray"))
+```
+
+First, in R Commander GUI, we selected the `percent` option as the y-axis:
+
+```{r}
+with(Rtest, Hist(Hhsize, scale="percent", breaks="Sturges", col="darkgray", 
+  xlab="Household size"))
+```
+
+Then we changed the color to green (`#00CD00`)...
+
+```{r}
+with(Rtest, Hist(Hhsize, scale="percent", breaks="Sturges", col=3, 
+  xlab="Household size"))
+```
+
+... and to blue (`#0000FF`)
+
+```{r}
+with(Rtest, Hist(Hhsize, scale="percent", breaks="Sturges", col=4, 
+  xlab="Household size"))
+```
+
+Export the graph file to disk:
+
+```{r}
+dev.print(png, 
++   filename="HHsize-hist.png",
++    width=1000, height=998, pointsize=12, units="px")
+```
+
+### Kernel density plot
+
+Kernel density estimate is a version of density representation
+that produces a smooth line rather than bars, like historgrams do.
+
+```{r}
+densityPlot( ~ AgeofPanelist, data=Rtest, bw="SJ", adjust=1, 
+  kernel="epanechnikov", xlab="Age")
+```
+
+### Scatterplots
+
+Scatterplots demonstrate the relations between two continuous variables.
+The relations may be monotone (i.e., one variable goes up as the other
+goes up or down), curvlinear with change of trends, cluster (i.e.,
+groups of observations separated in space), etc.
+
+```{r}
+scatterplot(TotTWLSW~AgeofPanelist, reg.line=FALSE, smooth=TRUE, 
+  spread=FALSE, boxplots='xy', span=0.5, ellipse=FALSE, levels=c(.5, .9), 
+  data=Rtest)
+```
+
+### Plotting symbols and linetypes (slide 66)
+
+Here are a couple of "classic" plots showing R symbols and line types.
+
+### Violin plot
+
+```{r}
+library(vioplot)
+vioplot(Rtest$AgeofPanelist,col="green3")
+```
+
+## Example 2.1
+
+> Using the dataBodyMeas dataset in the lessR package:
+
+> (a) plot a histogram of heights and use percentages as the basis of histogram (as opposed to frequencies)
+
+> (b) plot a density estimate of the heights (adjust =1.2)
+
+> (c) generate a boxplot of the heights.
+
+> (d) generate a violin plot of the heights – try two different values of the `h` parameter – try .3 and 1 and 4 
+and three different colors = "green", "red" and "magenta"
+
+```{r}
+library(lessR)
+data(dataBodyMeas)
+```
+
+### Example 2.1.a
+
+> plot a histogram of heights and use percentages as the basis of histogram (as opposed to frequencies)
+
+```{r}
+Hist(dataBodyMeas$Height,scale="percent")
+```
+
+### Example 2.1.b
+
+> plot a density estimate of the heights (adjust =1.2)
+
+```{r}
+densityPlot( ~ Height, data=dataBodyMeas, bw="SJ", adjust=1.2, 
+  kernel="epanechnikov")
+```
+
+### Example 2.1.c
+
+> generate a boxplot of the heights.
+
+```{r}
+Boxplot( ~ Height, data=dataBodyMeas, id.method="y")
+```
+
+### Example 2.1.d
+
+> generate a violin plot of the heights – try two different values of the `h` parameter – try .3 and 1 and 4 
+and three different colors = "green", "red" and "magenta"
+
+
+```{r}
+vioplot(dataBodyMeas$Height, col=c("green"), h=.3, horizontal=TRUE)
+title("Violin plot of Heights; h=.3", cex.main=1.5)
+```
+
+```{r}
+vioplot(dataBodyMeas$Height, col=c("red"), h=1, horizontal=TRUE)
+title("Violin plot of Heights; h=1", cex.main=1.5)
+```
+
+```{r}
+vioplot(dataBodyMeas$Height, col=c("magenta"), h=4, horizontal=TRUE)
+title("Violin plot of Heights; h=4", cex.main=1.5)
+```
+
+## Example 2.2
+
+### Example 2.2.a 
+
+> Using dataBodyMeas dataset in the lessR package, plot a density estimate of the heights distribution 
+for males and females using the Epanechnikov kernel function with default values. (multiplier of 1)
+
+```{r}
+densityPlot(Height~Gender, data=dataBodyMeas, bw="SJ", adjust=1, 
+   kernel="epanechnikov")
+```
+
+### Example 2.2.b
+
+> Repeat (a) but apply a multiplier of 1 for females and 5 for males 
+to the default bandwidth.  [Males have larger variability so we increase 
+the multiplier to “smooth out the plot”].  Use the 2nd and 4th colors 
+in your palette.  
+
+```{r}
+densityPlot(Height~Gender, data=dataBodyMeas, bw="SJ", adjust=c(1,5), 
+  kernel="epanechnikov",col=c(2,4))
+```
+
+### Example 2.2.c
+
+> Create side-by-side boxplots of the distribution of the weight by sex.  
+Use the third color in your color palette for this plot.  
+
+```{r}
+Boxplot(Weight~Gender,data=dataBodyMeas,col=2,id.method="none")
+```
+
+## Scatterplots and scatterplot matrices
+
+Rcommander can generate scatterplots that have extended features including:
+* loess smothed curves (locally weighted scatterplot smoothing)
+* spread of the smooth curve (variance+bias)
+* least squares regression line
+* marginal boxplots
+
+Rcommander can also generate scatterplot matrices
+* histograms, density plots or boxplots along the diagonal
+
+
+```{r}
+library(lattice, pos=16)
+xyplot(Hips + Waist ~ Height | Gender, outer=TRUE, layout=c( 2 * 1 , 2 ) , 
+  between=list(x=c( 0 ), y=1), type="p", pch=16, auto.key=list(border=TRUE), 
+  par.settings=simpleTheme(pch=16), scales=list(x=list(relation='same'), 
+  y=list(relation='same')), data=dataBodyMeas)
+```
+
+
+## Example 2.3
+
+Using `data(dataBodyMeas)`, produce a bunch of scatterplots
+
+### Example 2.3.a
+
+> Using the dataBodyMeas dataset in the lessR package, create a scatterplot 
+depicting the relationship between waist (X) and hip circumference (Y).  
+
+> *  Label the x-axis “Waist Circumference” and the y-axis “Hip Measure”.  
+Also plot marginal boxplots on the scatterplot axes.  
+All labels should have a multiplier of 1.2.    Point size should also have a multiplier of 1.3 and NO points should be labelled. 
+
+```{r}
+scatterplot(Hips~Waist, reg.line=FALSE, smooth=FALSE, spread=FALSE, 
+  boxplots='xy', span=0.5, ellipse=FALSE, levels=c(.5, .9), xlab="Waist 
+  Circumference", ylab="Hip Measure", cex=1.3, cex.axis=1.2, cex.lab=1.2, 
+  data=dataBodyMeas)
+```
+
+As cases with identical hip/waist measurements are glued together on the plot,
+it may make sense to jitter both measures, so that the said overlap is broken.
+
+```{r}
+scatterplot(Hips~Waist, reg.line=FALSE, smooth=FALSE, spread=FALSE, 
+  boxplots='xy', span=0.5, ellipse=FALSE, levels=c(.5, .9), jitter=list(x=1, 
+  y=1), xlab="Waist Circumference", ylab="Hip Measure", cex=1.3, cex.axis=1.2,
+   cex.lab=1.2, data=dataBodyMeas)
+```
+
+### Example 2.3.b
+
+> Using this same dataset, create a scatterplot matrix of height, weight and 
+waist size.
+> * choose histograms for the diagonal and do not plot additional lines or 
+identify any points within each plot.
+
+
+```{r}
+scatterplotMatrix(~Height+Waist+Weight, reg.line=FALSE, smooth=FALSE, 
+  spread=FALSE, span=0.5, ellipse=FALSE, levels=c(.5, .9), id.n=0, diagonal = 
+  'histogram', data=dataBodyMeas)
+```
+
+### Example 2.3.c
+
+> Create a `ShoeBin` variable that has 4 groups of equal size, 
+then use this variable to construct a plot of mean heights for each of the four 
+`Shoebin` groups.  Include standard deviations in the plot.  
+> * Label the y-axis "Mean Heights (and Std. Dev)" and the x-axis 
+"Shoe Size Quartile Groups"
+
+Creating four bins of `Shoe`:
+
+```{r}
+dataBodyMeas$ShoeBin4 <- with(dataBodyMeas, bin.var(Shoe, bins=4, 
+  method='proportions', labels=NULL))
+table(dataBodyMeas$ShoeBin4)
+```
+
+Plotting height by quartiles of `ShoeBin4`:
+
+
+```{r}
+with(dataBodyMeas, plotMeans(Height, ShoeBin4, error.bars="sd", 
+  xlab="Shoe Size Quartile Groups", ylab="Mean Heights and St Devs", 
+  connect=TRUE))
+```
+
+### Example 2.3.d
+
+> Create a plot of `height` (X) versus `weight` (Y) by conditioning on 
+`shoe` size quartile and `gender`.  
+> * Allow the x-axis  to remain the same for all plots, 
+but allow the y-axis to vary freely.  Use the plotting symbol of 
+a solid square (`pch=15`) and make its color the fourth one in your palette.  
+
+
+```{r}
+xyplot(Weight ~ Height | Gender + ShoeBin4, type="p", pch=15, 
+  auto.key=list(border=TRUE), par.settings=simpleTheme(pch=15), 
+  scales=list(x=list(relation='same'), y=list(relation='free')), 
+  data=dataBodyMeas, col=4)
+```
+
+## Plots for categorical variables
+
+`Rcommander` can easily produce **basic** graphs specifically relevant for categorical variables including:
+* Pie Graphs
+* Bar Charts (best with one categorical variable)
+`lessR` graphics capabilities for categorical variables extends the capabilities of Rcommander 
+* Bubble plots
+* expanded bar charts (multiple categorical variables)
+* Sunflower plots 
+
+### Bar charts
+
+From RCommander GUI:
+
+```{r}
+with(dataBodyMeas, Barplot(ShoeBin4, xlab="ShoeBin4", ylab="Frequency"))
+```
+
+Using `lessR`:
+
+```{r}
+ BarChart(ShoeBin4, data=dataBodyMeas, horiz=TRUE)
+```
+
+Note the interesting suggestions `lessR` made:
+
+```{r message=FALSE}
+Plot(ShoeBin4, data=dataBodyMeas)  # bubble plot
+Plot(ShoeBin4, values="count", data=dataBodyMeas)  # scatter plot
+BarChart(ShoeBin4, horiz=TRUE, data=dataBodyMeas)  # horizontal bar chart
+BarChart(ShoeBin4, colors="rainbow", data=dataBodyMeas)  # different bar colors 
+```
+
+Note, however, that `lessR` sometimes fails to pick up the right variable,
+and plots `Gender` instead of `ShoeBin4`.
+
+```{r}
+Barchart(Gender, by=ShoeBin, data=dataBodyMeas)
+```
+
+```{r}
+dataBodyMeas$ShoeBin4 <- with(dataBodyMeas, bin.var(Shoe, bins=4, 
+  method='proportions', labels=NULL))
+```
+
+
+```{r}
+BarChart(Gender, by=ShoeBin4, data=dataBodyMeas)
+```
+
+
+```{r}
+BarChart(Gender, by=ShoeBin4, data=dataBodyMeas, horiz=TRUE)
+```
+
+
+```{r}
+BarChart(Gender, by=ShoeBin4, data=dataBodyMeas, beside=TRUE)
+```
+
+
+```{r}
+dataBodyMeas$ShoeBin4 <- with(dataBodyMeas, bin.var(Shoe, bins=4, 
+  method='proportions', labels=NULL))
+# this has to be forced, as R reloads dataBodyMeas, apparently
+BarChart(Gender, by=ShoeBin4, data=dataBodyMeas)
+BarChart(Gender, by=ShoeBin4, data=dataBodyMeas, horiz=TRUE)
+BarChart(Gender, by=ShoeBin4, data=dataBodyMeas, beside=TRUE)
+BarChart(Gender, by=ShoeBin4, data=dataBodyMeas, prop=TRUE)
+```
+
+### Bubble plots
+
+Bubble plots enhance two or three-dimensional scatterplots by allowing 
+the inclusion of an additional variable that governs the size of plotted points.
+Bubble plots can be drawn easily using the `ScatterPlot()` function in the `lessR` 
+package.
+
+```{r}
+ScatterPlot(Height, Weight, data=dataBodyMeas, size=Waist, 
+bubble.power=.25, shape="circle")
+```
+
+Note that some of the `bubble` options have apparently changed
+between versions.
+
+Bubble plots can be conveniently used to visualize categorical
+variables, as well. Bubble plots applied to two categorical variables 
+(stored as numeric variables in R with fewer than 10 unique values each) 
+is a way to create a more informative scatterplot where the size of 
+the plotted point is proportional to another value. 
+Commonly this value is the frequency of  the cell formed by the 
+cross tabulation of the two categorical variables.
+
+```{r}
+dataBodyMeas$ShoeBin4 <- with(dataBodyMeas, bin.var(Shoe, bins=4, 
+  method='proportions', labels=NULL))
+dataBodyMeasSum <- as.data.frame(table(dataBodyMeas$ShoeBin4,dataBodyMeas$Gender))
+colnames(dataBodyMeasSum) <- c("ShoeBin4","Gender","Freq")
+ScatterPlot(Gender,ShoeBin4,data=dataBodyMeasSum,size=Freq)
+```
+
+Another variation on the topic of using a count variable
+to be added to the location on the scatterplot is the sunflower plot.
+In this plot, each point is depicted as a "sunflower" with the number 
+of petals being proportional to another variable -- most commonly, 
+the joint frequency of the specific levels of the two 
+categorical variables, considered together in a cross-tabulated 
+contingency table.
+
+```{r}
+dataBodyMeas$ShoeBin4 <- with(dataBodyMeas, bin.var(Shoe, bins=4, 
+  method='proportions', labels=NULL))
+# canonical version -- not sure if it works
+ScatterPlot(Gender,ShoeBin4,data=dataBodyMeasSum,size=Freq,shape="sunflower")
+# alternative -- the ticks and axes work poorly though
+sunflowerplot(ShoeBin4~Gender,data=dataBodyMeas)
+sunflowerplot(ShoeBin4~Gender,data=dataBodyMeas,xlim=c(0.5,2.5),ylim=c(0.5,4.5),axes=FALSE)
+axis(side=1,at=c(1,2),labels=c("Female","Male"),lwd=0)
+axis(side=2,at=1:4,lwd=0)
+```
+
+## Example 2.4
+
+The dataset `dataMach4` from the `lessR` package contains `Gender` and 
+20 Likert scale items assessing the degree of Machiavellianism present 
+in respondents. The Likert scales are 0=Strongly Disagree; 5=Strongly Agree.
+
+```{r}
+data(dataMach4)
+dataMach4 <- within(dataMach4, {
+  GenderNum <- as.factor(Gender)
+})
+LikertCats <- c("Strongly Disagree", "Disagree", "Slightly Disagree","Slightly Agree", "Agree", "Strongly Agree")
+```
+
+### Example 2.4.b
+
+> Create a horizontal bar chart for item `m06`: 
+> * Honesty is the Best Policy 
+> displaying proportions instead of frequencies
+
+
+```{r}
+BarChart(m06,data=dataMach4,horiz=TRUE,prop=TRUE)
+```
+
+### Example 2.4.c
+
+> Create a vertical bar chart for item `m07`: No Excuse for lying 
+> * separated by `Gender` 
+
+```{r}
+BarChart(Gender,data=dataMach4,by=m07,beside=TRUE)
+```
+
+The color scheme is different, and the variable label did not get through.
+
+### Example 2.4.d
+
+```{r}
+ScatterPlot(m06,  m07, data=dataMach4, value.labels=LikertCats, shape="sunflower")
+```
+
+# The End
+
+That's all folks!

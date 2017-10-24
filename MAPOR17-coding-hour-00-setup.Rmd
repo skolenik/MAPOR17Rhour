@@ -1,0 +1,73 @@
+<!-- R Commander Markdown Template -->
+
+MAPOR 2017 Coding Hour: Setup
+=============================
+
+### Trent Buskirk and Stas Kolenikov
+
+### `r as.character(Sys.Date())`
+
+```{r echo=FALSE}
+# include this code chunk as-is to set options
+knitr::opts_chunk$set(comment=NA, prompt=TRUE, out.width=750, fig.height=8, fig.width=8)
+library(Rcmdr)
+library(car)
+library(RcmdrMisc)
+```
+
+
+```{r echo=FALSE}
+# include this code chunk as-is to enable 3D graphs
+library(rgl)
+knitr::knit_hooks$set(webgl = hook_webgl)
+```
+
+
+## MAPOR 2017 R coding hour (Buskirk + Kolenikov)
+
+## Script 0: setup
+
+This is the list of recommended packages for this training:
+```{r}
+what.we.need <- c(
+	"Rcmdr", "lessR", "MASS", "boot", "nlme", "randomForest", "foreign",
+	"lattice", "MatchIt", "ggplot2", "survey", "PASWR", "readxl"
+)
+```
+
+Let us first figure out which packages you already have installed:
+
+```{r}
+packages <- rownames(installed.packages())
+```
+
+It looks like there are `r length(packages)` packages installed in the system already.
+
+Let's see if there are any packages that your system is missing:
+```{r collapse=TRUE}
+to_install <- what.we.need[!(what.we.need %in% packages)]
+to_install
+```
+
+If there is anything missing (i.e., the vector `to_install` has at least one entry,
+which is what we check with `if (length(to_install) > 0)`, we can install it now
+(you can expect a window to pop-up and ask you to select the CRAN mirror for this session):
+
+```{r collapse=TRUE}
+if (length(to_install) > 0) {
+  install.packages(to_install)
+}
+```
+
+Now, load all the packages that we need (output will be suppressed).
+The function `lapply` goes over the list supplied as the first argument,
+and applies the function that is its second argument. Everything else
+(e.g., in this case, the option `character.only = TRUE`) is passed as 
+parameter(s) of that function. 
+
+```{r message=FALSE, results="hide"}
+lapply(what.we.need, library, character.only = TRUE)
+```
+
+You should be all set now! Please proceed to Script 1.
+
