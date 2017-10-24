@@ -1,7 +1,7 @@
 <!-- R Commander Markdown Template -->
 
-MAPOR 2017 Coding Hour: Base Graphics
-=====================================
+MAPOR 2017 Coding Hour: Graphics
+================================
 
 ### Trent Buskirk and Stas Kolenikov
 
@@ -348,30 +348,7 @@ BarChart(ShoeBin4, colors="rainbow", data=dataBodyMeas)  # different bar colors
 Note, however, that `lessR` sometimes fails to pick up the right variable,
 and plots `Gender` instead of `ShoeBin4`.
 
-```{r}
-Barchart(Gender, by=ShoeBin, data=dataBodyMeas)
-```
-
-```{r}
-dataBodyMeas$ShoeBin4 <- with(dataBodyMeas, bin.var(Shoe, bins=4, 
-  method='proportions', labels=NULL))
-```
-
-
-```{r}
-BarChart(Gender, by=ShoeBin4, data=dataBodyMeas)
-```
-
-
-```{r}
-BarChart(Gender, by=ShoeBin4, data=dataBodyMeas, horiz=TRUE)
-```
-
-
-```{r}
-BarChart(Gender, by=ShoeBin4, data=dataBodyMeas, beside=TRUE)
-```
-
+Some suggested variations:
 
 ```{r}
 dataBodyMeas$ShoeBin4 <- with(dataBodyMeas, bin.var(Shoe, bins=4, 
@@ -407,9 +384,10 @@ Commonly this value is the frequency of  the cell formed by the
 cross tabulation of the two categorical variables.
 
 ```{r}
-dataBodyMeas$ShoeBin4 <- with(dataBodyMeas, bin.var(Shoe, bins=4, 
+mydata <- dataBodyMeas
+mydata$ShoeBin4 <- with(mydata, bin.var(Shoe, bins=4, 
   method='proportions', labels=NULL))
-dataBodyMeasSum <- as.data.frame(table(dataBodyMeas$ShoeBin4,dataBodyMeas$Gender))
+dataBodyMeasSum <- as.data.frame(table(mydata$ShoeBin4,mydata$Gender))
 colnames(dataBodyMeasSum) <- c("ShoeBin4","Gender","Freq")
 ScatterPlot(Gender,ShoeBin4,data=dataBodyMeasSum,size=Freq)
 ```
@@ -423,10 +401,8 @@ categorical variables, considered together in a cross-tabulated
 contingency table.
 
 ```{r}
-dataBodyMeas$ShoeBin4 <- with(dataBodyMeas, bin.var(Shoe, bins=4, 
-  method='proportions', labels=NULL))
 # canonical version -- not sure if it works
-ScatterPlot(Gender,ShoeBin4,data=dataBodyMeasSum,size=Freq,shape="sunflower")
+ScatterPlot(Gender,ShoeBin4,data=mydata,size=Freq,shape="sunflower")
 # alternative -- the ticks and axes work poorly though
 sunflowerplot(ShoeBin4~Gender,data=dataBodyMeas)
 sunflowerplot(ShoeBin4~Gender,data=dataBodyMeas,xlim=c(0.5,2.5),ylim=c(0.5,4.5),axes=FALSE)
@@ -479,3 +455,4 @@ ScatterPlot(m06,  m07, data=dataMach4, value.labels=LikertCats, shape="sunflower
 # The End
 
 That's all folks!
+
