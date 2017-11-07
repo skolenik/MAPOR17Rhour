@@ -1,7 +1,7 @@
 # MAPOR17Rhour
 Materials for the MAPOR 2017 R Coding Hour
 
-This directory includes the markdown files of the three chapters of the presentation, and the setup code.
+This directory includes the markdown and rendered HTML files of the three chapters of the presentation, and the setup code ([MAPOR17-coding-hour-00-setup.R](MAPOR17-coding-hour-00-setup.R)). Please run this setup script so that you have the libraries that you need for the MAPOR 2017 R coding hour.
 
 The [Datasets](Datasets) folder contains the data sets used in the presentation.
 
