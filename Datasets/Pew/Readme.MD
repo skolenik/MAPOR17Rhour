@@ -25,3 +25,10 @@ Files in this directory:
 * Pew-markdown.html -- rendered output
 
 The examples were run in RStudio, see http://www.rstudio.com
+
+For additional resources on R Markdown, please see:
+
+* [R Studio Markdown landing page](http://rmarkdown.rstudio.com/)
+* [R Studio Markdown cheatsheet](https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf)
+* [R Markdown package on CRAN](https://cran.r-project.org/web/packages/rmarkdown/index.html)
+* [R Markdown chapter](http://r4ds.had.co.nz/r-markdown.html) of Grolemund & Wickham's [R for Data Science](http://r4ds.had.co.nz/) online edition
