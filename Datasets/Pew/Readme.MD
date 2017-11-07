@@ -17,12 +17,12 @@ data sets, `*.sav`.
 
 Files in this directory:
 
-* Pew-3examples.R	-- a script to run Markdown with the three source files 
-* Pew-Aug16.html -- rendered output for the August 2016 data
-* Pew-June16.html -- rendered output for the June 2016 data
-* Pew-Oct16.html -- rendered output for the October 2016 data
-* Pew-markdown.Rmd -- main code
-* Pew-markdown.html -- rendered output
+* [Pew-3examples.R](Pew-3examples.R)	-- a script to run Markdown with the three source files 
+* [Pew-Aug16.html](Pew-Aug16.html) -- rendered output for the August 2016 data
+* [Pew-June16.html](Pew-June16.html) -- rendered output for the June 2016 data
+* [Pew-Oct16.html](Pew-Oct16.html) -- rendered output for the October 2016 data
+* [Pew-markdown.Rmd](Pew-markdown.Rmd) -- main code
+* [Pew-markdown.html](Pew-markdown.html) -- rendered output
 
 The examples were run in RStudio, see http://www.rstudio.com
 
